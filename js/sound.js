@@ -7,21 +7,18 @@ class SoundPlayer {
 
 	setType(type) {
 		if (!this.oscillator) throw new Error('no oscillator');
-		console.log('type', type);
 		this.oscillator.type = type;
 		return this;
 	}
 
 	setVolume(volume) {
 		if (!this.gainNode) throw new Error('no gain node');
-		console.log('volume', volume);
 		this.gainNode.gain.setValueAtTime(volume, this.context.currentTime);
 		return this;
 	}
 
 	setFrequency(frequency) {
 		if (!this.oscillator) throw new Error('no oscillator');
-		console.log('frequency', frequency);
 		this.oscillator.frequency.setValueAtTime(
 			frequency,
 			this.context.currentTime

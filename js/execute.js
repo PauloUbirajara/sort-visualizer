@@ -1,4 +1,4 @@
-const algorithms = [new BubbleSort(), new SelectionSort()];
+const algorithms = [new MergeSort(), new BubbleSort(), new SelectionSort()];
 
 let values = [];
 
