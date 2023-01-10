@@ -97,3 +97,87 @@ class SelectionSort extends Algorithm {
 		postMessage(new Step('sort-complete'));
 	}
 }
+
+class MergeSort extends Algorithm {
+	getName() {
+		return 'Merge Sort';
+	}
+
+	getID() {
+		return '3';
+	}
+
+	mergeSort(array) {
+		if (array.length === 1) return;
+
+		const middle = parseInt(array.length / 2);
+		const left = [];
+		for (let i = 0; i < middle; i++) {
+			left.push(array[i]);
+		}
+		const right = [];
+		for (let i = middle; i < array.length; i++) {
+			right.push(array[i]);
+		}
+
+		this.mergeSort(left);
+		this.mergeSort(right);
+
+		let leftIndex = 0;
+		let rightIndex = 0;
+		let currentIndex = 0;
+
+		while (leftIndex < left.length && rightIndex < right.length) {
+			if (left[leftIndex] < right[rightIndex]) {
+				array[currentIndex] = left[leftIndex];
+				compare({
+					first: leftIndex,
+					second: currentIndex,
+					isCorrect: false,
+					currentArray: array
+				});
+				leftIndex++;
+			} else {
+				array[currentIndex] = right[rightIndex];
+				compare({
+					first: rightIndex,
+					second: currentIndex,
+					isCorrect: false,
+					currentArray: array
+				});
+				rightIndex++;
+			}
+			currentIndex++;
+		}
+
+		while (leftIndex < left.length) {
+			array[currentIndex] = left[leftIndex];
+			compare({
+				first: leftIndex,
+				second: currentIndex,
+				isCorrect: true,
+				currentArray: array
+			});
+			currentIndex++;
+			leftIndex++;
+		}
+
+		while (rightIndex < right.length) {
+			array[currentIndex] = right[rightIndex];
+			compare({
+				first: rightIndex,
+				second: currentIndex,
+				isCorrect: true,
+				currentArray: array
+			});
+			currentIndex++;
+			rightIndex++;
+		}
+	}
+
+	sort(array) {
+		// Comparar
+		this.mergeSort(array);
+		postMessage(new Step('sort-complete'));
+	}
+}
