@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Visualizador - Ordenação</title>
+		<link rel="stylesheet" href="./css/styles.css">
+		<link rel="stylesheet" href="./css/canvas.css">
+		<link rel="stylesheet" href="./css/controls.css">
+		<script src="./js/canvas.js"></script>
+		<script src="./js/controls.js"></script>
+		<script src="./js/algorithms.js"></script>
+		<script src="./js/execute.js"></script>
+		<script src="./js/sound.js"></script>
+		<script defer src="./js/index.js"></script>
+	</head>
+	<body>
+		<div class="controls">
+			<form action="">
+				<label for="quantity">Quantidade de valores</label>
+				<input type="range" name="quantity" id="quantity" min="2" max="250" required />
+
+				<label for="speed">Velocidade de execução</label>
+				<input type="range" name="speed" id="speed" min="1" max="1000" required />
+
+				<select name="algorithm" id="algorithm" required></select>
+
+				<input type="submit" value="Executar" id="execute-button">
+			</form>
+
+			<p>Quantidade: <span id="quantity-value">-1</span></p>
+			<p>Velocidade: <span id="speed-value">-1</span>ms</p>
+
+			<span class="hide" onclick="collapseControls()">Esconder</span>
+		</div>
+		<div class="canvas"></div>
+	</body>
+</html>
