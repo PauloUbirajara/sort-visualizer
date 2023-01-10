@@ -12,6 +12,7 @@ window.onload = () => {
 };
 
 window.onresize = () => {
+	// Aguardar tempo antes de criar novo canvas
 	clearTimeout(debounceInterval);
 	debounceInterval = setTimeout(() => {
 		deletePreviousCanvas();
@@ -23,7 +24,13 @@ window.onresize = () => {
 let stepActions = [];
 let stepInterval = null;
 
+const colors = {
+	true: '#0f0',
+	false: '#f00'
+};
+
 window.onmessage = (e) => {
+	// Mensagens enviadas durante a ordenação
 	const { name, data } = e.data.data;
 
 	if (name === 'start') {
@@ -42,27 +49,32 @@ window.onmessage = (e) => {
 			clearCanvasBackground(currentCanvas);
 
 			draw(currentArray);
-			const colors = {
-				true: '#0f0',
-				false: '#f00'
-			};
-			drawValue(currentArray[first], first, colors[isCorrect], true);
-			drawValue(currentArray[second], second, colors[isCorrect], true);
+			drawValue({
+				value: currentArray[first],
+				index: first,
+				color: colors[isCorrect],
+				shouldPlaySound: true
+			});
+			drawValue({
+				value: currentArray[second],
+				index: second,
+				color: colors[isCorrect],
+				shouldPlaySound: true
+			});
 		});
 		return;
 	}
 
 	if (name === 'sort-complete') {
 		const { speed } = executeData;
-		stepActions.forEach((fn, i) => {
+		stepActions.forEach((stepFn, i) => {
 			setTimeout(() => {
-				fn();
+				stepFn();
 
-				// Caso estiver no último
+				// Caso estiver no último valor
 				if (i === stepActions.length - 1) {
 					enableExecuteButton(true);
 					draw(values);
-					resetAudioContext()
 				}
 			}, speed * i);
 		});

@@ -1,32 +1,58 @@
-let audioContext = new AudioContext();
+class SoundPlayer {
+	context = new AudioContext();
+	constructor() {
+		this.oscillator = this.context.createOscillator();
+		this.gainNode = this.context.createGain();
+	}
 
-function playSound(value, duration) {
-	setTimeout(() => {
-		const o = audioContext.createOscillator();
-		o.type = 'sine';
+	setType(type) {
+		if (!this.oscillator) throw new Error('no oscillator');
+		console.log('type', type);
+		this.oscillator.type = type;
+		return this;
+	}
 
-		const g = audioContext.createGain();
-		g.gain.value = 0.1;
+	setVolume(volume) {
+		if (!this.gainNode) throw new Error('no gain node');
+		console.log('volume', volume);
+		this.gainNode.gain.setValueAtTime(volume, this.context.currentTime);
+		return this;
+	}
 
-		// Som de acordo com o valor
-		const minFrequency = 300.0;
-		const maxFrequency = 440.0;
+	setFrequency(frequency) {
+		if (!this.oscillator) throw new Error('no oscillator');
+		console.log('frequency', frequency);
+		this.oscillator.frequency.setValueAtTime(
+			frequency,
+			this.context.currentTime
+		);
+		return this;
+	}
 
-		o.frequency.value = value * (maxFrequency - minFrequency) + minFrequency;
+	playSound({ value }) {
+		if (!this.gainNode) throw new Error('no gain node');
+		if (!this.oscillator) throw new Error('no oscillator');
 
-		o.connect(g);
-		g.connect(audioContext.destination);
+		this.oscillator.connect(this.gainNode);
 
-		o.start(0);
-		setTimeout(() => {
-			g.gain.exponentialRampToValueAtTime(
-				0.00000001,
-				audioContext.currentTime + 0.01
-			);
-		}, duration);
-	});
-}
+		this.setFrequency(value * 1000);
 
-function resetAudioContext() {
-	audioContext = new AudioContext();
+		this.gainNode.connect(this.context.destination);
+
+		this.oscillator.start(0);
+		return this;
+	}
+
+	stopSound() {
+		if (!this.gainNode) throw new Error('no gain node');
+		if (!this.oscillator) throw new Error('no oscillator');
+
+		this.gainNode.gain.setTargetAtTime(
+			1 / 1000,
+			this.context.currentTime,
+			0.02
+		);
+		this.oscillator.stop(this.context.currentTime + 0.05);
+		return this;
+	}
 }

@@ -27,21 +27,28 @@ function shuffle() {
 	values.sort((_a, _b) => 0.5 - Math.random());
 }
 
-function drawValue(value, i, color = '#fff', shouldPlaySound = false) {
+function drawValue({ value, index, color = '#fff', shouldPlaySound = false }) {
 	if (!currentContext) return;
 	if (!executeData) return;
 
 	currentContext.fillStyle = color;
 
-	const { quantity, speed } = executeData;
+	const { quantity } = executeData;
 	const y = currentCanvas.height;
 	const width = currentCanvas.width / quantity;
-	const x = width * i;
+	const x = width * index;
 	const height = (currentCanvas.height / quantity) * -(value + 1);
 
 	currentContext.fillRect(x, y, width, height);
 
-	if (shouldPlaySound) playSound(value, speed);
+	if (shouldPlaySound) {
+		const player = new SoundPlayer();
+		player
+			.setType('sine')
+			.setVolume(10)
+			.playSound({ value: value / quantity })
+			.stopSound();
+	}
 }
 
 function draw(array) {
@@ -56,7 +63,7 @@ function draw(array) {
 	currentContext.fillStyle = '#fff';
 
 	array.forEach((p, i) => {
-		drawValue(p, i);
+		drawValue({ value: p, index: i });
 	});
 }
 
