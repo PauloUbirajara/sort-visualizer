@@ -35,6 +35,14 @@
 	display: none;
 }
 
+.collapsed {
+	opacity: 0.2;
+}
+
+.collapsed:hover {
+	opacity: 1;
+}
+
 #algorithm {
 	padding: 1rem 1.5rem;
 }
