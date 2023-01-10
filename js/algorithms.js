@@ -12,9 +12,14 @@ class Step {
 	}
 }
 
+function compare({ first, second, isCorrect, currentArray }) {
+	const comparison = { first, second, isCorrect, currentArray };
+	postMessage(new Step('compare', comparison));
+}
+
 class BubbleSort extends Algorithm {
 	getName() {
-		return 'Bubble Sort'
+		return 'Bubble Sort';
 	}
 
 	getID() {
@@ -29,12 +34,7 @@ class BubbleSort extends Algorithm {
 
 			for (let i = 0; i < array.length - 1; i++) {
 				// Comparar
-				const comparison = {
-					first: i,
-					second: i + 1,
-					isCorrect: true,
-					currentArray: null
-				};
+				let isCorrect = true;
 
 				// Verificar
 				if (array[i] > array[i + 1]) {
@@ -42,13 +42,16 @@ class BubbleSort extends Algorithm {
 					array[i] = array[i + 1];
 					array[i + 1] = aux;
 
-					comparison['isCorrect'] = false;
+					isCorrect = false;
 					sorted = false;
 				}
 
-				comparison['currentArray'] = Array.from(array);
-
-				postMessage(new Step('compare', comparison));
+				compare({
+					first: i,
+					second: i + 1,
+					isCorrect,
+					currentArray: Array.from(array)
+				});
 			}
 		}
 
@@ -58,7 +61,7 @@ class BubbleSort extends Algorithm {
 
 class SelectionSort extends Algorithm {
 	getName() {
-		return 'Selection Sort'
+		return 'Selection Sort';
 	}
 
 	getID() {
@@ -71,22 +74,19 @@ class SelectionSort extends Algorithm {
 
 			for (let j = i + 1; j < array.length; j++) {
 				// Comparar
-				const comparison = {
-					first: i,
-					second: j,
-					isCorrect: true,
-					currentArray: null
-				};
+				let isCorrect = true;
 
 				// Verificar
 				if (array[j] < array[minimumValue]) {
 					minimumValue = j;
-					comparison['isCorrect'] = false;
+					isCorrect = false;
 				}
-
-				comparison['currentArray'] = Array.from(array);
-
-				postMessage(new Step('compare', comparison));
+				compare({
+					first: i,
+					second: j,
+					isCorrect,
+					currentArray: Array.from(array)
+				});
 			}
 
 			const aux = array[i];
